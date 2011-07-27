@@ -19,15 +19,18 @@ public class Cloche extends Activity implements SensorEventListener{
     
 	private SensorManager sensorMgr;
 	private Sensor mAccelerometer;
-    private long lastUpdate = -1;
-    private float x, y, z, azimuth, pitch, roll;
-    private float last_x, last_y, last_z, last_azimuth, last_pitch, last_roll;
-    private static final int HARD_SHAKE = 550;
-    private static final int SOFT_SHAKE = 250;
     
     private ImageView cloche;
-
-	
+    private AnalyseurMouvement analyseurMvt;
+    
+    private final static int MVT_RAPIDE=1;
+    private final static int MVT_MOYEN=2;
+    private final static int MVT_FAIBLE=3;
+    private final static int MVT_ROTATION_DROITE=4;
+    private final static int MVT_ROTATION_GAUCHE=5;
+    private final static int MVT_RETOUR_ROTATION_DROITE=6;
+    private final static int MVT_RETOUR_ROTATION_GAUCHE=7;
+    
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class Cloche extends Activity implements SensorEventListener{
         cloche = (ImageView) findViewById(R.id.cloche);
         cloche.setBackgroundResource(R.drawable.animation);
         
-        
+        analyseurMvt = new AnalyseurMouvement();
         startMotionDetection();
       }
 
@@ -51,70 +54,25 @@ public class Cloche extends Activity implements SensorEventListener{
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		synchronized (this) {
-	        switch (event.sensor.getType()){
-	            case Sensor.TYPE_ACCELEROMETER:
-	            	long curTime = System.currentTimeMillis();
-	    		    // only allow one update every 100ms.
-	    		    if ((curTime - lastUpdate) > 100) {
-	    				long diffTime = (curTime - lastUpdate);
-	    				lastUpdate = curTime;
-	    		 
-	    				x = event.values[0];
-	    				y = event.values[1];
-	    				z = event.values[2];
-	    		 
-	    				float speed = Math.abs(x+y+z - last_x - last_y - last_z)
-	    		                              / diffTime * 10000;
-	    				if (speed < HARD_SHAKE && speed > SOFT_SHAKE) {
-	    					animate(R.id.cloche, R.drawable.mvt_faible);
-	    				}else if(speed > HARD_SHAKE){
-	    					animate(R.id.cloche, R.drawable.animation);
-	    				}
-	    				last_x = x;
-	    				last_y = y;
-	    				last_z = z;
-	    		    }
-		        break;
-		        
-		        case Sensor.TYPE_ORIENTATION:
-	    				
-//		        		azimuth = event.values[0];
-//		        		pitch = event.values[1];
-//		        		roll = event.values[2];
-//		        		
-//		        		if(80 < (azimuth - last_azimuth) && (azimuth - last_azimuth)< 100){
-//		        			cloche.setBackgroundResource(R.drawable.droite_forte);
-//	    			        droiteForteAnim = (AnimationDrawable) cloche.getBackground();
-//	    			        droiteForteAnim.start();
-//		        		}
-//		        		
-//		        		last_azimuth = azimuth;
-//		        		last_pitch = pitch;
-//		        		last_roll = roll;
-		        		
-		        break;
-	 
-	        }
+			
+			switch(analyseurMvt.analyserMouvement(event)){
+				case MVT_RAPIDE:
+					animate(R.id.cloche, R.drawable.animation);break;
+				case MVT_FAIBLE:
+					animate(R.id.cloche, R.drawable.mvt_faible);break;
+				case MVT_ROTATION_DROITE:
+					animate(R.id.cloche, R.drawable.droite_forte);break;
+				case MVT_ROTATION_GAUCHE:
+					animate(R.id.cloche, R.drawable.gauche_forte);break;
+			}
 	    }
 	}
 
-	private void desactivateSensorFor(int tmp) {
-		try {
-			sensorMgr.unregisterListener(this);
-			this.wait(tmp);
-			sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private void animate(int imageViewId, int animationId){
 		sensorMgr.unregisterListener(this);
 		
@@ -145,11 +103,6 @@ public class Cloche extends Activity implements SensorEventListener{
 		}
 	}
 	
-	private Callback registerSensor() {
-		sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
-		return null;
-	}
-
 	private void startMotionDetection() {
 		// start motion detection
 		sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
