@@ -4,30 +4,26 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable.Callback;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 public class Cloche extends Activity implements SensorEventListener{
     
-//	AnimationDrawable rocketAnimation;
-//	AnimationDrawable mvtRapideAnim;
-//	AnimationDrawable ralentissmentAnim;
-//	AnimationDrawable moyenAnim;
-//	AnimationDrawable faibleAnim;
-//	AnimationDrawable droiteForteAnim;
-//	AnimationDrawable gaucheForteAnim;
-	
 	private SensorManager sensorMgr;
 	private Sensor mAccelerometer;
     private long lastUpdate = -1;
     private float x, y, z, azimuth, pitch, roll;
     private float last_x, last_y, last_z, last_azimuth, last_pitch, last_roll;
-    private static final int SHAKE_THRESHOLD = 450;
+    private static final int HARD_SHAKE = 550;
+    private static final int SOFT_SHAKE = 250;
     
     private ImageView cloche;
 
@@ -76,34 +72,14 @@ public class Cloche extends Activity implements SensorEventListener{
 	    		 
 	    				float speed = Math.abs(x+y+z - last_x - last_y - last_z)
 	    		                              / diffTime * 10000;
-	    				if (speed > SHAKE_THRESHOLD) {
-	    				    // yes, this is a shake action! Do something about it!
-	    					
+	    				if (speed < HARD_SHAKE && speed > SOFT_SHAKE) {
+	    					animate(R.id.cloche, R.drawable.mvt_faible);
+	    				}else if(speed > HARD_SHAKE){
 	    					animate(R.id.cloche, R.drawable.animation);
-//	    					desactivateSensorFor(300);
-////	    			        cloche.post(new Runnable(){
-//	    			        Cloche.this.runOnUiThread(new Runnable(){
-//	    			        AnimationDrawable mvtRapideAnim = (AnimationDrawable) cloche.getBackground();
-//
-//								@Override
-//								public void run() {
-////									mvtRapideAnim.start();
-//									animate(R.id.cloche, R.drawable.mvt_rapide);
-//								}
-//	    			        	
-//	    			        });
-//	    			        
-////	    			        mvtRapideAnim.start();
-//	    			        
-////	    					AnimationDrawable mvtRapideAnim = AnimationUtils.loadAnimation(Cloche.this, R.drawable.mvt_rapide);
-////	    			        cloche.startAnimation(mvtRapideAnim);
-	    			        
-	    			        
 	    				}
 	    				last_x = x;
 	    				last_y = y;
 	    				last_z = z;
-	    				//commentaire
 	    		    }
 		        break;
 		        
@@ -139,24 +115,41 @@ public class Cloche extends Activity implements SensorEventListener{
 		}
 	}
 	
-	private void animate(int imageView, int animation){
-//		sensorMgr.unregisterListener(this);
-//		desactivateSensorFor(300);
-		ImageView imgView = (ImageView)findViewById(imageView);
+	private void animate(int imageViewId, int animationId){
+		sensorMgr.unregisterListener(this);
+		
+		Runnable registerSensorRunnable = new Runnable(){
+			@Override
+			public void run() {
+				sensorMgr.registerListener(Cloche.this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
+			}
+		};
+		
+		ImageView imgView = (ImageView)findViewById(imageViewId);
 		imgView.setVisibility(ImageView.VISIBLE);
-		imgView.setBackgroundResource(animation);
-		AnimationDrawable frameAnimation = (AnimationDrawable) imgView.getBackground();
-		if (frameAnimation.isRunning()){
-			frameAnimation.stop();
-//			sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
-		}
-		else{
-			frameAnimation.stop();
-			frameAnimation.start();
-		}
+		imgView.setBackgroundResource(animationId);
+		
+		registerAnimation(imageViewId, registerSensorRunnable);
+		
 	}
 
+	private void registerAnimation(int id, final Runnable cb){
+		final ImageView imgView = (ImageView)findViewById(id);
+		final CustomAnimationDrawable aniDrawable = new CustomAnimationDrawable((AnimationDrawable)imgView.getBackground());
+		imgView.setBackgroundDrawable(aniDrawable);
+
+		aniDrawable.setOnFinishCallback(cb);
+		
+		if(!aniDrawable.isRunning()){
+			aniDrawable.start();
+		}
+	}
 	
+	private Callback registerSensor() {
+		sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
+		return null;
+	}
+
 	private void startMotionDetection() {
 		// start motion detection
 		sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
