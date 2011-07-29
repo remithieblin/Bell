@@ -32,18 +32,13 @@ public final class R {
         public static final int cloche_gauche2=0x7f02000a;
         public static final int cloche_gauche3=0x7f02000b;
         public static final int cloche_gauche4=0x7f02000c;
-        public static final int droite_forte=0x7f02000d;
-        public static final int gauche_forte=0x7f02000e;
-        public static final int icon=0x7f02000f;
-        public static final int mvt_faible=0x7f020010;
-        public static final int mvt_moyen=0x7f020011;
-        public static final int mvt_rapide=0x7f020012;
-        public static final int ralentissment=0x7f020013;
-        public static final int retour_droite_forte=0x7f020014;
-        public static final int retour_gauche_forte=0x7f020015;
+        public static final int icon=0x7f02000d;
+        public static final int mvt_faible=0x7f02000e;
+        public static final int mvt_moyen=0x7f02000f;
     }
     public static final class id {
-        public static final int cloche=0x7f070000;
+        public static final int adView=0x7f070000;
+        public static final int cloche=0x7f070001;
     }
     public static final class layout {
         public static final int main=0x7f030000;

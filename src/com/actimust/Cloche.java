@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable.Callback;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class Cloche extends Activity implements SensorEventListener{
@@ -26,15 +25,17 @@ public class Cloche extends Activity implements SensorEventListener{
     private final static int MVT_RAPIDE=1;
     private final static int MVT_MOYEN=2;
     private final static int MVT_FAIBLE=3;
-    private final static int MVT_ROTATION_DROITE=4;
-    private final static int MVT_ROTATION_GAUCHE=5;
-    private final static int MVT_RETOUR_ROTATION_DROITE=6;
-    private final static int MVT_RETOUR_ROTATION_GAUCHE=7;
     
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        
         setContentView(R.layout.main);
         cloche = (ImageView) findViewById(R.id.cloche);
         cloche.setBackgroundResource(R.drawable.animation);
@@ -65,10 +66,8 @@ public class Cloche extends Activity implements SensorEventListener{
 					animate(R.id.cloche, R.drawable.animation);break;
 				case MVT_FAIBLE:
 					animate(R.id.cloche, R.drawable.mvt_faible);break;
-				case MVT_ROTATION_DROITE:
-					animate(R.id.cloche, R.drawable.droite_forte);break;
-				case MVT_ROTATION_GAUCHE:
-					animate(R.id.cloche, R.drawable.gauche_forte);break;
+				case MVT_MOYEN:
+					animate(R.id.cloche, R.drawable.mvt_moyen);break;
 			}
 	    }
 	}

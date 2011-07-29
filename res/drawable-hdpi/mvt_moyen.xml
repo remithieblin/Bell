@@ -18,20 +18,20 @@
     <item android:drawable="@drawable/cloche_gauche2" android:duration="10" />
     <item android:drawable="@drawable/cloche_gauche1" android:duration="10" />
     <item android:drawable="@drawable/cloche_centre" android:duration="10" />
-    <item android:drawable="@drawable/cloche_droite05" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite1" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite2" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite3" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite2" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite1" android:duration="50" />
-    <item android:drawable="@drawable/cloche_droite05" android:duration="50" />
-    <item android:drawable="@drawable/cloche_centre" android:duration="50" />
-    <item android:drawable="@drawable/cloche_gauche05" android:duration="50" />
-    <item android:drawable="@drawable/cloche_gauche1" android:duration="50" />
-    <item android:drawable="@drawable/cloche_gauche2" android:duration="50" />
-    <item android:drawable="@drawable/cloche_gauche2" android:duration="100" />
-    <item android:drawable="@drawable/cloche_gauche1" android:duration="100" />
-    <item android:drawable="@drawable/cloche_gauche05" android:duration="100" />
-    <item android:drawable="@drawable/cloche_centre" android:duration="100" />
+    <item android:drawable="@drawable/cloche_droite05" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite1" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite2" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite3" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite2" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite1" android:duration="10" />
+    <item android:drawable="@drawable/cloche_droite05" android:duration="10" />
+    <item android:drawable="@drawable/cloche_centre" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche05" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche1" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche2" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche2" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche1" android:duration="10" />
+    <item android:drawable="@drawable/cloche_gauche05" android:duration="10" />
+    <item android:drawable="@drawable/cloche_centre" android:duration="5" />
     
 </animation-list>
