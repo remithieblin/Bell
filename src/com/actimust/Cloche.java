@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -21,6 +22,9 @@ public class Cloche extends Activity implements SensorEventListener{
     
     private ImageView cloche;
     private AnalyseurMouvement analyseurMvt;
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayerMoyen;
+    private MediaPlayer mediaPlayerSoft;
     
     private final static int MVT_RAPIDE=1;
     private final static int MVT_MOYEN=2;
@@ -38,9 +42,13 @@ public class Cloche extends Activity implements SensorEventListener{
         
         setContentView(R.layout.main);
         cloche = (ImageView) findViewById(R.id.cloche);
-        cloche.setBackgroundResource(R.drawable.animation);
+        cloche.setBackgroundResource(R.drawable.mvt_faible);
         
         analyseurMvt = new AnalyseurMouvement();
+        mediaPlayer = MediaPlayer.create(this, R.raw.cloche_medium);
+        mediaPlayerMoyen = MediaPlayer.create(this, R.raw.cloche_medium);
+        mediaPlayerMoyen.setVolume(0.2f, 0.2f);
+        mediaPlayerSoft = MediaPlayer.create(this, R.raw.touche);
         startMotionDetection();
       }
 
@@ -48,6 +56,7 @@ public class Cloche extends Activity implements SensorEventListener{
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
         	AnimationDrawable rocketAnimation = (AnimationDrawable) cloche.getBackground();
         	rocketAnimation.start();
+        	mediaPlayerSoft.start();
           return true;
         }
         return super.onTouchEvent(event);
@@ -63,22 +72,26 @@ public class Cloche extends Activity implements SensorEventListener{
 			
 			switch(analyseurMvt.analyserMouvement(event)){
 				case MVT_RAPIDE:
-					animate(R.id.cloche, R.drawable.animation);break;
+					mediaPlayer.start();
+					animate(R.id.cloche, R.drawable.animation);
+					break;
 				case MVT_FAIBLE:
 					animate(R.id.cloche, R.drawable.mvt_faible);break;
 				case MVT_MOYEN:
-					animate(R.id.cloche, R.drawable.mvt_moyen);break;
+					mediaPlayerMoyen.start();
+					animate(R.id.cloche, R.drawable.mvt_moyen);
+					break;
 			}
 	    }
 	}
 
 	private void animate(int imageViewId, int animationId){
-		sensorMgr.unregisterListener(this);
+//		sensorMgr.unregisterListener(this);
 		
 		Runnable registerSensorRunnable = new Runnable(){
 			@Override
 			public void run() {
-				sensorMgr.registerListener(Cloche.this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
+//				sensorMgr.registerListener(Cloche.this, mAccelerometer, SensorManager.SENSOR_ACCELEROMETER);
 			}
 		};
 		
