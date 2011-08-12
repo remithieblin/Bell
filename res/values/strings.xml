@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Cloche!</string>
-    <string name="app_name">Cloche</string>
+    <string name="app_name">Table Bell</string>
+    <string name="autres_app">Other App</string>
+	<string name="about_button">About</string>
 </resources>

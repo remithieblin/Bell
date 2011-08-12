@@ -37,11 +37,16 @@ public final class R {
         public static final int mvt_moyen=0x7f02000f;
     }
     public static final class id {
-        public static final int adView=0x7f080000;
-        public static final int cloche=0x7f080001;
+        public static final int about=0x7f090003;
+        public static final int adView=0x7f090000;
+        public static final int autresApplisId=0x7f090002;
+        public static final int cloche=0x7f090001;
     }
     public static final class layout {
         public static final int main=0x7f030000;
+    }
+    public static final class menu {
+        public static final int menu=0x7f080000;
     }
     public static final class raw {
         public static final int cloche_medium=0x7f040000;
@@ -49,8 +54,9 @@ public final class R {
         public static final int touche=0x7f040002;
     }
     public static final class string {
-        public static final int app_name=0x7f060001;
-        public static final int hello=0x7f060000;
+        public static final int about_button=0x7f060002;
+        public static final int app_name=0x7f060000;
+        public static final int autres_app=0x7f060001;
     }
     public static final class style {
         public static final int BlackBoldText=0x7f070000;
